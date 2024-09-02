@@ -49,12 +49,6 @@ For Data Analytics And AI:
 
 [![My Skills](https://skillicons.dev/icons?i=git,postman,docker,aws,gcp,figma,)](https://skillicons.dev)
 
-## 📜 Certifications
-
-- **Dicoding Certification**: Explore my [Dicoding Profile](https://www.dicoding.com/users/faqihhakim) to see my certifications and achievements in various tech fields.
-
-- ***Google Cloud Skills Boost Profile***: Explore my [Google Cloud Skills Boost Public Profile](https://www.cloudskillsboost.google/public_profiles/b79023b6-fbcf-4e48-92d3-01dea1ae20ec) to see my certifications and achievements in cloud computing.
-
 ## 📊 GitHub Stats
 
 ![Muhammad Faqih Hakim's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Fqih&show_icons=true&theme=radical)
