@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="135" height="40" viewBox="0 0 135 40" role="img">
+  <rect width="135" height="40" rx="20" fill="#34A853"/>
+  <svg x="14" y="8" width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+  </svg>
+  <text x="46" y="25" font-family="Poppins, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Connect</text>
+</svg>
