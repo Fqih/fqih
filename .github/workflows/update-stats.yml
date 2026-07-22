@@ -1,0 +1,65 @@
+name: Update Profile Assets
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/update-stats.yml
+      - .github/scripts/generate_profile_assets.py
+      - README.md
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: update-profile-assets
+  cancel-in-progress: false
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate local profile assets
+        env:
+          GH_USERNAME: fqih
+          GH_TOKEN: ${{ secrets.STATS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/generate_profile_assets.py
+
+      - name: Commit and push generated assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            svg/custom-stats.svg \
+            svg/custom-stats-dark.svg \
+            svg/custom-stats-light.svg \
+            svg/streak.svg \
+            svg/streak-dark.svg \
+            svg/streak-light.svg \
+            svg/top-langs.svg \
+            svg/top-langs-dark.svg \
+            svg/top-langs-light.svg \
+            svg/trophy.svg \
+            svg/trophy-dark.svg \
+            svg/trophy-light.svg
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update profile assets"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push
+          else
+            echo "No generated asset changes"
+          fi
