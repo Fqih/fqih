@@ -2,7 +2,7 @@
   <source media="(prefers-color-scheme: dark)" srcset="./svg/top-bar-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./svg/top-bar.svg">
   <!-- Seluruh metadata SEO sekarang disembunyikan dengan aman di dalam atribut alt ini -->
-  <img src="./svg/top-bar.svg" alt="Muhammad Faqih Hakim is an AI Engineer and Data Analyst based in Indonesia. Currently working at PT Tunas Ridean focusing on LLM automation and data pipelines. Final-year Informatics student at Gunadarma University (GPA 3.87). Specializes in Python, PyTorch Geometric, Graph Neural Networks (GNN), Apache Kafka, Neo4j, and Qdrant. Experienced in full-stack AI engineering, data science, and agentic fraud detection systems. Machine Learning Associate Core Team at GDGoC Gunadarma. Grand Champion of Pesta Data Nasional and 3rd Place at Fesmaro Big Data. Open to global tech opportunities, including software engineering and data roles in Japan starting in 2027." width="100%">
+  <img src="./svg/top-bar.svg" alt="Muhammad Faqih Hakim is an AI Engineer and Data Analyst based in Indonesia. Currently working at PT Tunas Ridean focusing on LLM automation and data pipelines. Final-year Informatics student at Gunadarma University (GPA 3.87). Specializes in Python, PyTorch Geometric, Graph Neural Networks (GNN), Apache Kafka, Neo4j, and Qdrant. Experienced in full-stack AI engineering, data science, and agentic fraud detection systems. Machine Learning Associate Core Team at GDGoC Gunadarma. Grand Champion of Pesta Data Nasional and 3rd Place at Fesmaro Big Data. Open to global tech opportunities" width="100%">
 </picture>
 
 <br>
