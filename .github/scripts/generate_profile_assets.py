@@ -30,17 +30,17 @@ SUBTLE = "#AD9D7F"
 ACCENT = "#B7361A"
 STATUS = "#0F9D58"
 
-# Dark variant: same layout, palette remapped in one pass (zen scale
-# inverted, accent lifted for contrast on the dark paper).
+# Dark variant: same layout, palette remapped in one pass onto GitHub's
+# dark neutrals so cards blend into the page; accent lifted for contrast.
 DARK = {
-    PAPER: "#161512",
-    BORDER: "#40372F",
-    GRID: "#5F5142",
-    INK: "#F0EEE8",
-    MUTED: "#AD9D7F",
-    SUBTLE: "#8A7A62",
-    ACCENT: "#E8664A",
-    STATUS: "#34C77B",
+    PAPER: "#0D1117",
+    BORDER: "#30363D",
+    GRID: "#3D444D",
+    INK: "#E6EDF3",
+    MUTED: "#9198A1",
+    SUBTLE: "#6E7681",
+    ACCENT: "#F0714F",
+    STATUS: "#3FB950",
 }
 DARK_PATTERN = re.compile("|".join(map(re.escape, DARK)))
 
@@ -166,12 +166,12 @@ def wave_path(top, amp, period, bottom):
     return f"{d} V{bottom} H0Z"
 
 
-def render_waves(height, band=64):
+def render_waves(height, band=46):
     top = height - band
     layers = [  # (color, opacity, amplitude, period, seconds, reverse)
-        (GRID, 0.35, 13, 480, 18, False),
-        (ACCENT, 0.22, 10, 320, 12, True),
-        (ACCENT, 0.45, 7, 240, 8, False),
+        (GRID, 0.45, 9, 480, 18, False),
+        (SUBTLE, 0.22, 7, 320, 12, True),
+        (ACCENT, 0.5, 5, 240, 8, False),
     ]
     style = (
         "<style>"
@@ -182,7 +182,7 @@ def render_waves(height, band=64):
         "</style>"
     )
     paths = "".join(
-        f"<path class='wave' d='{wave_path(top + 14 + index * 14, amp, period, height)}' fill='{color}' "
+        f"<path class='wave' d='{wave_path(top + 10 + index * 10, amp, period, height)}' fill='{color}' "
         f"fill-opacity='{opacity}' style='animation-duration:{seconds}s"
         f"{';animation-direction:reverse' if reverse else ''}'/>"
         for index, (color, opacity, amp, period, seconds, reverse) in enumerate(layers)
@@ -193,22 +193,22 @@ def render_waves(height, band=64):
 
 def render_header():
     p = PROFILE
-    height = 296
+    height = 232
     body = "".join([
         render_waves(height),
-        f"<circle class='pulse' cx='44' cy='45' r='5' fill='{STATUS}'/>",
-        text(58, 50, p["status"].upper(), MONO, 12, MUTED, "letter-spacing='1.2'"),
-        text(916, 50, p["location"], MONO, 12, SUBTLE, "text-anchor='end' letter-spacing='1.2'"),
-        text(36, 122, p["name"], SERIF, 52, INK, "font-weight='500' letter-spacing='-1'"),
-        text(38, 160, p["title"], SANS, 21, ACCENT, "font-weight='600'"),
-        text(208, 160, p["focus"], SANS, 18, MUTED),
-        f"<line x1='38' y1='184' x2='922' y2='184' stroke='{BORDER}'/>",
-        text(38, 210, "NOW", MONO, 11, ACCENT, "font-weight='700' letter-spacing='1.5'"),
-        text(82, 210, p["now"], MONO, 13, INK),
-        f"<g transform='rotate(-4 860 120)'>"
-        f"<rect x='822' y='84' width='76' height='76' rx='8' fill='{ACCENT}'/>"
-        f"<rect x='828' y='90' width='64' height='64' rx='5' fill='none' stroke='{PAPER}' stroke-opacity='.7'/>"
-        + text(860, 134, p["initials"], SERIF, 34, PAPER, "text-anchor='middle' font-weight='600'")
+        f"<circle class='pulse' cx='44' cy='41' r='5' fill='{STATUS}'/>",
+        text(58, 46, p["status"].upper(), MONO, 12, MUTED, "letter-spacing='1.2'"),
+        text(916, 46, p["location"], MONO, 12, SUBTLE, "text-anchor='end' letter-spacing='1.2'"),
+        text(36, 100, p["name"], SERIF, 46, INK, "font-weight='500' letter-spacing='-1'"),
+        text(38, 134, p["title"], SANS, 21, ACCENT, "font-weight='600'"),
+        text(208, 134, p["focus"], SANS, 18, MUTED),
+        f"<line x1='38' y1='154' x2='922' y2='154' stroke='{BORDER}'/>",
+        text(38, 176, "NOW", MONO, 11, ACCENT, "font-weight='700' letter-spacing='1.5'"),
+        text(82, 176, p["now"], MONO, 13, INK),
+        f"<g transform='rotate(-4 880 98)'>"
+        f"<rect x='852' y='70' width='56' height='56' rx='6' fill='{ACCENT}'/>"
+        f"<rect x='856.5' y='74.5' width='47' height='47' rx='4' fill='none' stroke='{PAPER}' stroke-opacity='.7'/>"
+        + text(880, 107, p["initials"], SERIF, 25, PAPER, "text-anchor='middle' font-weight='600'")
         + "</g>",
     ])
     return card(height, f"{p['name']}, {p['title']}: {p['focus']}", body)
