@@ -2,7 +2,7 @@
 
 I build agentic AI, graph ML, and local LLM systems that move from research into production for enterprise finance, university HPC, and applied research.
 
-**[Portfolio ↗](https://faqihhakim.tech/)** &nbsp;·&nbsp; [Connect](https://connect.faqihhakim.tech/) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/faqih-hakim/) &nbsp;·&nbsp; [Hugging Face](https://huggingface.co/faqihhakim) &nbsp;·&nbsp; `mhmdfkih21@gmail.com`
+**[Portfolio ↗](https://faqihhakim.tech/)** &nbsp;·&nbsp; [Connect](https://connect.faqihhakim.tech/) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/faqih-hakim/) &nbsp;·&nbsp; [Hugging Face](https://huggingface.co/faqihhakim) &nbsp;·&nbsp; [contact-me@faqihhakim.tech](mailto:contact-me@faqihhakim.tech)
 
 ### Featured work
 
