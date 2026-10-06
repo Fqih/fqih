@@ -1,16 +1,28 @@
-<img src="./svg/top-bar.svg" alt="Faqih Hakim">
+<a href="https://faqihhakim.tech/"><img src="./svg/header.svg" alt="Muhammad Faqih Hakim, AI/ML Engineer: Agentic AI, Graph ML, HPC / Local LLMs" width="100%"></a>
 
-<a href="https://faqihhakim.tech/"><code>$ open faqihhakim.tech                    # portfolio</code></a><br>
-<a href="https://www.linkedin.com/in/faqih-hakim/"><code>$ open linkedin.com/in/faqih-hakim        # network</code></a><br>
-<a href="mailto:mhmdfkih21@gmail.com"><code>$ mail mhmdfkih21@gmail.com               # inbox</code></a><br>
-<a href="https://huggingface.co/faqihhakim"><code>$ open huggingface.co/faqihhakim         # models</code></a>
+I build agentic AI, graph ML, and local LLM systems that move from research into production for enterprise finance, university HPC, and applied research.
+
+**[Portfolio ↗](https://faqihhakim.tech/)** &nbsp;·&nbsp; [Connect](https://connect.faqihhakim.tech/) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/faqih-hakim/) &nbsp;·&nbsp; [Hugging Face](https://huggingface.co/faqihhakim) &nbsp;·&nbsp; `mhmdfkih21@gmail.com`
+
+### Featured work
+
+| Project | What it is | Result |
+| --- | --- | --- |
+| [**Agentic Fraud Detection**](https://faqihhakim.tech/projects/graph-fraud-detection/) | GNN + LLM-RAG investigator on IBM AML data (thesis) | 25M+ transactions · F1 94.28% · ROC-AUC 0.98 |
+| [**DGX Chatbot**](https://faqihhakim.tech/projects/dgx-chatbot-agentic-rag/) | 4-way hybrid RAG on vLLM, NVIDIA DGX A100 | serves 2,000+ students |
+| [**Vera**](https://faqihhakim.tech/projects/ai-financial-reconciliation-agent/) | Agentic financial reconciliation for Tunas Group | 97%+ accuracy · 14,000+ docs · 159 branches |
+| [**Avo**](https://github.com/Fqih/avo) | Autonomous coding agent and runtime, single binary | sandboxed · 3-tier model failover |
+
+### Stack
 
 ```text
-// stack
-LLM · Python · PyTorch · LangChain · Hugging Face
-data · SQL · Pandas · Airflow · vector DB · RAG
-graph · Neo4j · NetworkX
+ai      Python · PyTorch · Hugging Face · LLM & agentic AI · RAG · scikit-learn
+graph   GNN · Neo4j · Memgraph · Qdrant
+infra   NVIDIA DGX & HPC · vLLM / local LLMs · Docker · CI/CD · GCP
+data    SQL · BigQuery · PostgreSQL · KNIME
+web     TypeScript · React · Hono · Tailwind
 ```
 
-<img src="./svg/stats.svg" alt="Stats" width="100%">
-<img src="./svg/langs.svg" alt="Languages" width="100%">
+<img src="./svg/stats.svg" alt="GitHub and academic stats" width="100%">
+
+<img src="./svg/langs.svg" alt="Primary languages across public repositories" width="100%">

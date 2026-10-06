@@ -2,64 +2,46 @@ name: Update Profile Assets
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - .github/workflows/update-stats.yml
       - .github/scripts/generate_profile_assets.py
-      - README.md
   schedule:
-    - cron: '0 */12 * * *'
+    # Hourly, off the top of the hour when GitHub's scheduler is congested.
+    - cron: '17 * * * *'
   workflow_dispatch:
 
 concurrency:
   group: update-profile-assets
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   update-stats:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v5
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Generate local profile assets
+      - name: Generate profile assets
         env:
-          GH_USERNAME: fqih
-          GH_TOKEN: ${{ secrets.STATS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USERNAME: Fqih
+          # Optional PAT; the script falls back to GITHUB_TOKEN when it
+          # is missing, expired, or revoked.
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/generate_profile_assets.py
 
-      - name: Commit and push generated assets
+      - name: Commit changed assets
         run: |
+          git add svg/
+          if git diff --staged --quiet; then
+            echo "No asset changes"
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            svg/custom-stats.svg \
-            svg/custom-stats-dark.svg \
-            svg/custom-stats-light.svg \
-            svg/streak.svg \
-            svg/streak-dark.svg \
-            svg/streak-light.svg \
-            svg/top-langs.svg \
-            svg/top-langs-dark.svg \
-            svg/top-langs-light.svg \
-            svg/trophy.svg \
-            svg/trophy-dark.svg \
-            svg/trophy-light.svg
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: update profile assets"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push
-          else
-            echo "No generated asset changes"
-          fi
+          git commit -m "chore: refresh profile stats"
+          git pull --rebase origin main
+          git push
