@@ -158,10 +158,45 @@ def text(x, y, content, font, size, fill, extra=""):
     return f"<text x='{x}' y='{y}' font-family=\"{font}\" font-size='{size}' fill='{fill}' {extra}>{esc(content)}</text>"
 
 
+def wave_path(top, amp, period, bottom):
+    # Two card-widths long so a translateX of -WIDTH loops seamlessly;
+    # period must divide WIDTH.
+    d = f"M0 {top} Q{period / 4} {top - amp} {period / 2} {top}"
+    d += "".join(f" T{x} {top}" for x in range(period, 2 * WIDTH + 1, period // 2))
+    return f"{d} V{bottom} H0Z"
+
+
+def render_waves(height, band=64):
+    top = height - band
+    layers = [  # (color, opacity, amplitude, period, seconds, reverse)
+        (GRID, 0.35, 13, 480, 18, False),
+        (ACCENT, 0.22, 10, 320, 12, True),
+        (ACCENT, 0.45, 7, 240, 8, False),
+    ]
+    style = (
+        "<style>"
+        f"@keyframes drift{{to{{transform:translateX(-{WIDTH}px)}}}}"
+        "@keyframes pulse{50%{opacity:.25}}"
+        ".wave{animation:drift linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}"
+        "@media (prefers-reduced-motion:reduce){.wave,.pulse{animation:none}}"
+        "</style>"
+    )
+    paths = "".join(
+        f"<path class='wave' d='{wave_path(top + 14 + index * 14, amp, period, height)}' fill='{color}' "
+        f"fill-opacity='{opacity}' style='animation-duration:{seconds}s"
+        f"{';animation-direction:reverse' if reverse else ''}'/>"
+        for index, (color, opacity, amp, period, seconds, reverse) in enumerate(layers)
+    )
+    clip = f"<clipPath id='edge'><rect x='1' y='1' width='{WIDTH - 2}' height='{height - 2}' rx='13'/></clipPath>"
+    return f"{style}{clip}<g clip-path='url(#edge)'>{paths}</g>"
+
+
 def render_header():
     p = PROFILE
+    height = 296
     body = "".join([
-        f"<circle cx='44' cy='45' r='5' fill='{STATUS}'/>",
+        render_waves(height),
+        f"<circle class='pulse' cx='44' cy='45' r='5' fill='{STATUS}'/>",
         text(58, 50, p["status"].upper(), MONO, 12, MUTED, "letter-spacing='1.2'"),
         text(916, 50, p["location"], MONO, 12, SUBTLE, "text-anchor='end' letter-spacing='1.2'"),
         text(36, 122, p["name"], SERIF, 52, INK, "font-weight='500' letter-spacing='-1'"),
@@ -176,7 +211,7 @@ def render_header():
         + text(860, 134, p["initials"], SERIF, 34, PAPER, "text-anchor='middle' font-weight='600'")
         + "</g>",
     ])
-    return card(236, f"{p['name']}, {p['title']}: {p['focus']}", body)
+    return card(height, f"{p['name']}, {p['title']}: {p['focus']}", body)
 
 
 def render_stats(data):
