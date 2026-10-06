@@ -10,6 +10,7 @@ so the workflow only commits when a number actually changes.
 import html
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -28,6 +29,20 @@ MUTED = "#77664F"
 SUBTLE = "#AD9D7F"
 ACCENT = "#B7361A"
 STATUS = "#0F9D58"
+
+# Dark variant: same layout, palette remapped in one pass (zen scale
+# inverted, accent lifted for contrast on the dark paper).
+DARK = {
+    PAPER: "#161512",
+    BORDER: "#40372F",
+    GRID: "#5F5142",
+    INK: "#F0EEE8",
+    MUTED: "#AD9D7F",
+    SUBTLE: "#8A7A62",
+    ACCENT: "#E8664A",
+    STATUS: "#34C77B",
+}
+DARK_PATTERN = re.compile("|".join(map(re.escape, DARK)))
 
 SERIF = "Newsreader, Georgia, 'Times New Roman', serif"
 SANS = "Inter, 'Segoe UI', system-ui, sans-serif"
@@ -227,16 +242,18 @@ def render_languages(repos, top=5):
 
 def write(name, content):
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    with open(os.path.join(OUTPUT_DIR, name), "w", encoding="utf-8") as handle:
-        handle.write(content)
+    variants = {"light": content, "dark": DARK_PATTERN.sub(lambda m: DARK[m.group()], content)}
+    for theme, svg in variants.items():
+        with open(os.path.join(OUTPUT_DIR, f"{name}-{theme}.svg"), "w", encoding="utf-8") as handle:
+            handle.write(svg)
 
 
 def main():
     login = os.environ.get("GH_USERNAME") or os.environ.get("GITHUB_REPOSITORY_OWNER") or "Fqih"
     data = fetch_with_fallback(login)
-    write("header.svg", render_header())
-    write("stats.svg", render_stats(data))
-    write("langs.svg", render_languages(data["repos"]))
+    write("header", render_header())
+    write("stats", render_stats(data))
+    write("langs", render_languages(data["repos"]))
     print(f"{login}: {data['contributions']} contributions, {data['repo_count']} repos, {data['stars']} stars")
 
 

@@ -1,4 +1,4 @@
-<a href="https://faqihhakim.tech/"><img src="./svg/header.svg" alt="Muhammad Faqih Hakim, AI/ML Engineer: Agentic AI, Graph ML, HPC / Local LLMs" width="100%"></a>
+<a href="https://faqihhakim.tech/"><picture><source media="(prefers-color-scheme: dark)" srcset="./svg/header-dark.svg"><img src="./svg/header-light.svg" alt="Muhammad Faqih Hakim, AI/ML Engineer: Agentic AI, Graph ML, HPC / Local LLMs" width="100%"></picture></a>
 
 I build agentic AI, graph ML, and local LLM systems that move from research into production for enterprise finance, university HPC, and applied research.
 
@@ -23,6 +23,6 @@ data    SQL · BigQuery · PostgreSQL · KNIME
 web     TypeScript · React · Hono · Tailwind
 ```
 
-<img src="./svg/stats.svg" alt="GitHub and academic stats" width="100%">
+<picture><source media="(prefers-color-scheme: dark)" srcset="./svg/stats-dark.svg"><img src="./svg/stats-light.svg" alt="GitHub and academic stats" width="100%"></picture>
 
-<img src="./svg/langs.svg" alt="Primary languages across public repositories" width="100%">
+<picture><source media="(prefers-color-scheme: dark)" srcset="./svg/langs-dark.svg"><img src="./svg/langs-light.svg" alt="Primary languages across public repositories" width="100%"></picture>
