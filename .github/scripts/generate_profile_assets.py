@@ -62,7 +62,6 @@ PROFILE = {
 STATIC_STATS = [
     ("3.88", "GPA · cum laude"),
     ("42", "certifications"),
-    ("400+", "students mentored"),
 ]
 
 ICONS_FILE = os.path.join(os.path.dirname(__file__), "..", "icons", "simple-icons.json")
@@ -229,7 +228,7 @@ def render_sun(cx, cy, r=22):
         "<style>"
         "@keyframes rise{50%{transform:translateY(-7px)}}"
         "@keyframes spin{to{transform:rotate(360deg)}}"
-        "@keyframes glow{50%{opacity:.08}}"
+        "@keyframes glow{50%{opacity:.04}}"
         ".sun{animation:rise 9s ease-in-out infinite}"
         f".rays{{animation:spin 40s linear infinite;transform-origin:{cx}px {cy}px}}"
         ".halo{animation:glow 4s ease-in-out infinite}"
@@ -238,7 +237,7 @@ def render_sun(cx, cy, r=22):
     )
     return (
         f"{style}<g class='sun'>"
-        f"<circle class='halo' cx='{cx}' cy='{cy}' r='{r + 18}' fill='{SUN}' fill-opacity='.2'/>"
+        f"<circle class='halo' cx='{cx}' cy='{cy}' r='{r + 18}' fill='{SUN}' fill-opacity='.12'/>"
         f"<g class='rays' stroke-opacity='.85'>{rays}</g>"
         f"<circle cx='{cx}' cy='{cy}' r='{r}' fill='{SUN}'/></g>"
     )
@@ -317,7 +316,7 @@ def render_profile(data):
     height = 340
     stats, summary = render_stats_row(data)
     shares = language_shares(data["repos"])
-    body = render_sun(840, 314, r=20) + render_waves(height, band=40) + render_identity(p) + stats + render_languages_row(shares)
+    body = render_sun(700, 78, r=18) + render_waves(height, band=40) + render_identity(p) + stats + render_languages_row(shares)
     languages = ", ".join(f"{name} {share * 100:.0f}%" for name, share, _ in shares)
     return card(height, f"{p['name']}, {p['title']}. {summary}. Languages: {languages}", body)
 
