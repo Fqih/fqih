@@ -191,51 +191,8 @@ def render_waves(height, band=46):
     return f"{style}{clip}<g clip-path='url(#edge)'>{paths}</g>"
 
 
-def render_header():
-    p = PROFILE
-    height = 232
-    body = "".join([
-        render_waves(height),
-        f"<circle class='pulse' cx='44' cy='41' r='5' fill='{STATUS}'/>",
-        text(58, 46, p["status"].upper(), MONO, 12, MUTED, "letter-spacing='1.2'"),
-        text(916, 46, p["location"], MONO, 12, SUBTLE, "text-anchor='end' letter-spacing='1.2'"),
-        text(36, 100, p["name"], SERIF, 46, INK, "font-weight='500' letter-spacing='-1'"),
-        text(38, 134, p["title"], SANS, 21, ACCENT, "font-weight='600'"),
-        text(208, 134, p["focus"], SANS, 18, MUTED),
-        f"<line x1='38' y1='154' x2='922' y2='154' stroke='{BORDER}'/>",
-        text(38, 176, "NOW", MONO, 11, ACCENT, "font-weight='700' letter-spacing='1.5'"),
-        text(82, 176, p["now"], MONO, 13, INK),
-        f"<g transform='rotate(-4 880 98)'>"
-        f"<rect x='852' y='70' width='56' height='56' rx='6' fill='{ACCENT}'/>"
-        f"<rect x='856.5' y='74.5' width='47' height='47' rx='4' fill='none' stroke='{PAPER}' stroke-opacity='.7'/>"
-        + text(880, 107, p["initials"], SERIF, 25, PAPER, "text-anchor='middle' font-weight='600'")
-        + "</g>",
-    ])
-    return card(height, f"{p['name']}, {p['title']}: {p['focus']}", body)
-
-
-def render_stats(data):
-    cells = [
-        (compact(data["contributions"]), "contributions"),
-        (str(data["repo_count"]), "public repos"),
-        (str(data["stars"]), "stars earned"),
-        *STATIC_STATS,
-    ]
-    cell_w = (WIDTH - 64) / len(cells)
-    parts = []
-    for index, (value, label) in enumerate(cells):
-        x = 32 + index * cell_w
-        if index:
-            parts.append(f"<line x1='{x:.1f}' y1='30' x2='{x:.1f}' y2='94' stroke='{BORDER}'/>")
-        parts.append(text(f"{x + 18:.1f}", 68, value, SERIF, 36, ACCENT if index < 3 else INK, "font-weight='500'"))
-        parts.append(text(f"{x + 18:.1f}", 90, label.upper(), MONO, 10, MUTED, "letter-spacing='1'"))
-    summary = ", ".join(f"{value} {label}" for value, label in cells)
-    return card(124, f"Stats: {summary}", "".join(parts))
-
-
-def render_languages(repos, top=5):
-    colors = {}
-    counts = Counter()
+def language_shares(repos, top=4):
+    colors, counts = {}, Counter()
     for repo in repos:
         language = repo["primaryLanguage"]
         if language:
@@ -247,32 +204,69 @@ def render_languages(repos, top=5):
     if other:
         ranked.append(("Other", other))
         colors["Other"] = BORDER
+    return [(name, count / total, colors[name]) for name, count in ranked]
 
-    bar_x, bar_w = 36, WIDTH - 72
-    parts = [
-        text(36, 46, "LANGUAGES", MONO, 11, ACCENT, "font-weight='700' letter-spacing='1.5'"),
-        text(924, 46, f"primary language across {total} public repos", MONO, 11, SUBTLE, "text-anchor='end'"),
-        f"<clipPath id='bar'><rect x='{bar_x}' y='64' width='{bar_w}' height='10' rx='5'/></clipPath>",
-        "<g clip-path='url(#bar)'>",
+
+def render_identity(p):
+    return "".join([
+        f"<circle class='pulse' cx='44' cy='41' r='5' fill='{STATUS}'/>",
+        text(58, 46, p["status"].upper(), MONO, 12, MUTED, "letter-spacing='1.2'"),
+        text(916, 46, p["location"], MONO, 12, SUBTLE, "text-anchor='end' letter-spacing='1.2'"),
+        text(36, 98, p["name"], SERIF, 44, INK, "font-weight='500' letter-spacing='-1'"),
+        text(38, 130, p["title"], SANS, 20, ACCENT, "font-weight='600'"),
+        text(202, 130, p["focus"], SANS, 17, MUTED),
+        text(38, 158, "NOW", MONO, 11, ACCENT, "font-weight='700' letter-spacing='1.5'"),
+        text(82, 158, p["now"], MONO, 13, INK),
+        f"<g transform='rotate(-4 880 92)'>"
+        f"<rect x='852' y='64' width='56' height='56' rx='6' fill='{ACCENT}'/>"
+        f"<rect x='856.5' y='68.5' width='47' height='47' rx='4' fill='none' stroke='{PAPER}' stroke-opacity='.7'/>"
+        + text(880, 101, p["initials"], SERIF, 25, PAPER, "text-anchor='middle' font-weight='600'")
+        + "</g>",
+        f"<line x1='38' y1='178' x2='922' y2='178' stroke='{BORDER}'/>",
+    ])
+
+
+def render_stats_row(data, y=218):
+    cells = [
+        (compact(data["contributions"]), "contributions"),
+        (str(data["repo_count"]), "public repos"),
+        (str(data["stars"]), "stars earned"),
+        *STATIC_STATS,
     ]
+    cell_w = (WIDTH - 76) / len(cells)
+    parts = []
+    for index, (value, label) in enumerate(cells):
+        x = 38 + index * cell_w
+        parts.append(text(f"{x:.1f}", y, value, SERIF, 30, ACCENT if index < 3 else INK, "font-weight='500'"))
+        parts.append(text(f"{x:.1f}", y + 18, label.upper(), MONO, 10, MUTED, "letter-spacing='1'"))
+    return "".join(parts), ", ".join(f"{value} {label}" for value, label in cells)
+
+
+def render_languages_row(shares, y=266):
+    bar_x, bar_w = 38, WIDTH - 76
+    parts = [f"<clipPath id='bar'><rect x='{bar_x}' y='{y}' width='{bar_w}' height='6' rx='3'/></clipPath><g clip-path='url(#bar)'>"]
     x = bar_x
-    for name, count in ranked:
-        width = bar_w * count / total
-        parts.append(f"<rect x='{x:.1f}' y='64' width='{width + 0.5:.1f}' height='10' fill='{colors[name]}'/>")
-        x += width
+    for _, share, color in shares:
+        parts.append(f"<rect x='{x:.1f}' y='{y}' width='{bar_w * share + 0.5:.1f}' height='6' fill='{color}'/>")
+        x += bar_w * share
     parts.append("</g>")
+    x = bar_x
+    for name, share, color in shares:
+        label = f"{name} {share * 100:.0f}%"
+        parts.append(f"<circle cx='{x + 4}' cy='{y + 24}' r='4' fill='{color}'/>")
+        parts.append(text(x + 14, y + 28, label, MONO, 11, MUTED))
+        x += 14 + len(label) * 7 + 22
+    return "".join(parts)
 
-    col_w = bar_w / 3
-    for index, (name, count) in enumerate(ranked):
-        cx = bar_x + (index % 3) * col_w
-        cy = 108 + (index // 3) * 28
-        parts.append(f"<circle cx='{cx + 5:.1f}' cy='{cy - 4}' r='5' fill='{colors[name]}'/>")
-        parts.append(text(f"{cx + 18:.1f}", cy, name, SANS, 14, INK, "font-weight='500'"))
-        parts.append(text(f"{cx + col_w - 24:.1f}", cy, f"{count * 100 / total:.0f}%", MONO, 12, MUTED, "text-anchor='end'"))
 
-    rows = (len(ranked) + 2) // 3
-    summary = ", ".join(f"{name} {count * 100 / total:.0f}%" for name, count in ranked)
-    return card(96 + rows * 28, f"Languages: {summary}", "".join(parts))
+def render_profile(data):
+    p = PROFILE
+    height = 340
+    stats, summary = render_stats_row(data)
+    shares = language_shares(data["repos"])
+    body = render_waves(height, band=40) + render_identity(p) + stats + render_languages_row(shares)
+    languages = ", ".join(f"{name} {share * 100:.0f}%" for name, share, _ in shares)
+    return card(height, f"{p['name']}, {p['title']}. {summary}. Languages: {languages}", body)
 
 
 def write(name, content):
@@ -286,9 +280,7 @@ def write(name, content):
 def main():
     login = os.environ.get("GH_USERNAME") or os.environ.get("GITHUB_REPOSITORY_OWNER") or "Fqih"
     data = fetch_with_fallback(login)
-    write("header", render_header())
-    write("stats", render_stats(data))
-    write("langs", render_languages(data["repos"]))
+    write("profile", render_profile(data))
     print(f"{login}: {data['contributions']} contributions, {data['repo_count']} repos, {data['stars']} stars")
 
 
